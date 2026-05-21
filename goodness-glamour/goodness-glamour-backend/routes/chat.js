@@ -1,12 +1,17 @@
 import express from "express";
+import multer from "multer";
 import { getAIResponse } from "../services/aiService.js";
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 // POST /api/chat
-router.post("/", async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const { message, sessionId } = req.body;
+    const message = req.body.message;
+const sessionId = req.body.sessionId;
+const image = req.file;
+console.log("Image received:", image?.originalname);
 
     if (!message) {
       return res.status(400).json({
@@ -14,11 +19,29 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const response = await getAIResponse(
-      sessionId || "web-user",
-      message,
-      "chat"
-    );
+    let finalMessage = message;
+
+if (image) {
+  finalMessage = `
+User uploaded a hair image.
+
+User question:
+${message}
+
+Please give professional haircare advice,
+hairstyle suggestions,
+hair fall treatment tips,
+scalp analysis assumptions,
+and salon recommendations naturally.
+`;
+}
+
+
+const response = await getAIResponse(
+  sessionId || "web-user",
+  finalMessage,
+  "chat"
+);
 
     res.json({
       success: true,

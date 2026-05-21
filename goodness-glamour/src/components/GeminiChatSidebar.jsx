@@ -77,15 +77,20 @@ const sendMessage = async (customText) => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://goodness-glamour-ui.onrender.com/api/chat", {
+     
+  
+  const formData = new FormData();
+
+formData.append("message", text);
+formData.append("sessionId", "website-user");
+
+if (selectedImage?.file) {
+  formData.append("image", selectedImage.file);
+}
+
+const response = await fetch("http://localhost:4000/api/chat", {
   method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    message: text,
-    sessionId: "website-user",
-  }),
+  body: formData,
 });
 
 const data = await response.json();
@@ -100,6 +105,7 @@ let reply = data.reply || "✨ Sorry, I couldn't respond right now.";
       reply = reply.replace(/\[INST\]|\[\/INST\]|<<SYS>>|<\/SYS>>|<s>|<\/s>/g, "").trim();
 
       setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
+      setSelectedImage(null);
     } catch (error) {
       console.error("HF error:", error.message);
       let errorMsg = "⚠️ Something went wrong. Please try again.";

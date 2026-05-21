@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "https://goodness-glamour-ui.onrender.com/api";
+const API = "http://localhost:4000/api";
 
 const services = [
   { id: 1, name: "Haircut & Styling", price: 599, duration: "45 min", icon: "✂️" },
