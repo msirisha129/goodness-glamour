@@ -88,7 +88,7 @@ if (selectedImage?.file) {
   formData.append("image", selectedImage.file);
 }
 
-const response = await fetch("http://localhost:4000/api/chat", {
+const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
   method: "POST",
   body: formData,
 });

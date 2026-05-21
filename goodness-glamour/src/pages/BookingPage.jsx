@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "http://localhost:4000/api";
+const API = import.meta.env.VITE_API_URL;
 
 const services = [
   { id: 1, name: "Haircut & Styling", price: 599, duration: "45 min", icon: "✂️" },
