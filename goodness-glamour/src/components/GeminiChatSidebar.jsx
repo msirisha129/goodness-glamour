@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-const HF_MODEL = "mistralai/Mistral-7B-Instruct-v0.2";
-const API_KEY = import.meta.env.VITE_HF_API_KEY;
+
 
 const SYSTEM_PROMPT = `You are a luxury salon AI assistant for Goodness Glamour Salon.
 You help users with hairstyles, haircuts, hair coloring, hair treatments, hair care routines, salon suggestions, and styling tips.
@@ -112,7 +111,7 @@ let reply = data.reply || "✨ Sorry, I couldn't respond right now.";
       if (error.message?.includes("loading")) {
         errorMsg = "⏳ Model is loading, please wait 20 seconds and try again.";
       } else if (error.message?.includes("token") || error.message?.includes("auth")) {
-        errorMsg = "⚠️ API key issue. Check VITE_HF_API_KEY in your .env file.";
+        errorMsg = "⚠️ AI service temporarily unavailable.";
       }
       setMessages((prev) => [...prev, { role: "assistant", text: errorMsg }]);
     } finally {
