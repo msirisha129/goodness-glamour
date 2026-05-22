@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, ".env") });
 import whatsappRoutes from "./routes/whatsapp.js";
 import chatRoutes from "./routes/chat.js";
+import appointmentRoutes from "./routes/appointments.js";
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/api/voice", voiceRoutes);
 app.use("/api/sms", smsRoutes);app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/appointments", appointmentRoutes);
 // ─── Twilio Client ────────────────────────────────────────────────────────────
 const twilioClient = twilio(
   process.env.TWILIO_ACCOUNT_SID,
