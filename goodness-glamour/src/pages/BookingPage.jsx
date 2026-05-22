@@ -51,15 +51,14 @@ export default function BookingPage({ navigate }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: selected.name,
-          email: selected.email,
-          phone: selected.phone,
-          service: selected.service?.name,
-          date: selected.date,
-          time: selected.time,
-          stylist: selected.stylist?.name,
-          price: selected.service?.price,
-        }),
+  clientName: selected.name,
+  email: selected.email,
+  phone: selected.phone,
+  service: selected.service?.name,
+  dateTime: `${selected.date} ${selected.time}`,
+  stylist: selected.stylist?.name,
+  price: selected.service?.price,
+}),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
