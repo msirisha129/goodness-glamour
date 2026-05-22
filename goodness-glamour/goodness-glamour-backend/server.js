@@ -31,7 +31,6 @@ const twilioClient = twilio(
 
 // ─── Nodemailer (Gmail) ───────────────────────────────────────────────────────
 const mailer = nodemailer.createTransport({
-  service: "gmail",
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
