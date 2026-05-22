@@ -8,9 +8,7 @@ dotenv.config();
 
 import Groq from "groq-sdk";
 const conversationStore = new Map(); // In-memory; swap for Redis in production
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+
 // ── Salon Knowledge Base ──────────────────────────────────────────────────────
 const SALON_KNOWLEDGE = {
   name: "Goodness Glamour",
@@ -153,22 +151,44 @@ async function callHuggingFace(messages, channel) {
 }
 
 async function callGroq(messages, channel) {
-  const systemPrompt = buildSystemPrompt(channel);
+  try {
+    console.log("=== GROQ DEBUG START ===");
+    console.log("Provider:", process.env.AI_PROVIDER);
+    console.log("Model:", process.env.GROQ_MODEL);
+    console.log("Key exists:", !!process.env.GROQ_API_KEY);
 
-  const completion = await groq.chat.completions.create({
-    model: process.env.GROQ_MODEL || "llama3-8b-8192",
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      ...messages,
-    ],
-    temperature: 0.8,
-    max_tokens: 500,
-  });
+    const groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
 
-  return completion.choices[0].message.content;
+    const systemPrompt = buildSystemPrompt(channel);
+
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL || "llama3-8b-8192",
+
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+
+        ...messages,
+      ],
+
+      temperature: 0.8,
+      max_tokens: 500,
+    });
+
+    console.log("=== GROQ SUCCESS ===");
+
+    return completion.choices[0]?.message?.content || "No response generated.";
+
+  } catch (error) {
+    console.error("=== GROQ ERROR ===");
+    console.error(error);
+
+    throw error;
+  }
 }
 
 // ── Main AI Router ────────────────────────────────────────────────────────────
@@ -184,7 +204,7 @@ async function getAIResponse(sessionId, userMessage, channel = 'chat') {
   const recentHistory = history.slice(-10);
 
   let response;
-  const provider = process.env.AI_PROVIDER || 'gemini';
+  const provider = (process.env.AI_PROVIDER || 'groq').toLowerCase();
 
   try {
     if (provider === 'groq') {
