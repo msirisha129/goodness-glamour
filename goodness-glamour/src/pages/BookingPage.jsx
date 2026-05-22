@@ -47,7 +47,7 @@ export default function BookingPage({ navigate }) {
     }
     setSending(true);
     try {
-      const res = await fetch(`${API}/booking-confirm`, {
+      const res = await fetch(`${API}/api/appointments/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
