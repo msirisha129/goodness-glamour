@@ -164,7 +164,7 @@ async function callGroq(messages, channel) {
     const systemPrompt = buildSystemPrompt(channel);
 
     const completion = await groq.chat.completions.create({
-      model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+      model: "llama-3.1-8b-instant",
 
       messages: [
         {
