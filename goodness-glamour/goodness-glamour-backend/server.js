@@ -40,10 +40,9 @@ const mailer = nodemailer.createTransport({
   },
 });
 
-mailer.verify((err) => {
-  if (err) console.error("❌ Gmail FAILED:", err.message);
-  else console.log("✅ Gmail connected!");
-});
+mailer.verify()
+  .then(() => console.log("✅ Gmail connected!"))
+  .catch((err) => console.error("❌ Gmail FAILED:", err.message));
 
 // ─── In-memory stores ─────────────────────────────────────────────────────────
 const otpStore = {};
